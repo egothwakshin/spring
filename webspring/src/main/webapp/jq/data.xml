@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<apink>
+	<userlist>
+		<username>홍길동</username>
+		<userid>hong</userid>
+		<useremail>hong@nate.com</useremail>
+	</userlist>
+	<userlist>
+		<username>이순신</username>
+		<userid>lee</userid>
+		<useremail>lee@naver.com</useremail>
+	</userlist>
+</apink>

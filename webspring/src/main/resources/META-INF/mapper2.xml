@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="noticeDB">
+<!-- 
+concat : mybatis에서 사용하는 검색 클래스
+mysql & mariadb : concat('%',변수) 또는 concat('%',변수,'%')
+oracle : concat('%'||변수) 또는 concat('%'||변수||'%')
+mssql : like '%'+변수 또는 like '%'+변수+'%"
+ -->
+ <!-- 다중처리로 삭제하는 방식 2가지 -->
+ <delete id="notice_delete2"> <!-- 문자열을 , 기준 순서대로 삭제 (다중처리) -->
+ 	delete from notice where FIND_IN_SET(nidx,#{nidx})
+ </delete>
+ 
+ <delete id="notice_delete"> <!-- 배열을 , 기준 foreach를 이용하여 순서대로 삭제 (다중처리) -->
+ 	delete from notice where nidx in (
+ 	<foreach collection="array" item="list" separator=",">
+ 		#{list}
+ 	</foreach>
+ 	)
+ </delete>
+ 
+ <delete id="notice_select_del">
+ 	delete from notice where nidx=#{nidx}
+ </delete>
+ 
+ 
+<!-- 정적쿼리문 -->
+<select id="notice_all" resultType="noticeDAO">
+	select * from notice order by nidx desc;
+</select>
+
+<!-- 동적쿼리문 -->
+<select id="notice_search" resultType="noticeDAO" parameterType="Map">
+	select * from notice
+	<where>		<!-- where 태그 : sql의 where절 이하 동일한 쓰임 -->
+	<!-- 
+	조건문사용시 주의사항: 숫자는 '' 붙여야하고, 문자는 '' 없이 핸들링
+	and(&amp;&amp;),or(|amp;|amp;) 이용하여 추가조건 핸들링 할수있음	
+	-->
+		<if test="search_part==1">	<!-- 제목을 검색할 경우 -->
+			n_subject like concat('%',#{search_word},'%')
+		</if>
+		<if test="search_part==2">
+			n_title = #{search_word}
+		</if>
+		<if test="search_part==3">
+			n_subject like concat('%',#{search_word},'%') or n_title = #{search_word}
+		</if>
+	</where>
+	order by nidx desc;
+</select>
+
+</mapper>

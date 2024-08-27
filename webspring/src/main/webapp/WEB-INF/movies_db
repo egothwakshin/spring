@@ -1,0 +1,9 @@
+create table movies(
+midx int(6) unsigned not null auto_increment, /*자동증가값*/
+msubject varchar(100) not null,	/*영화제목*/
+cinema set("CGV","MEGA BOX","LOTTE") not null, /*등록된 영화관*/
+ticketing int(5) not null,	/*예매가격*/
+screen_date date not null default '0001-01-01',	/*상영일자*/
+primary key(midx)
+)
+

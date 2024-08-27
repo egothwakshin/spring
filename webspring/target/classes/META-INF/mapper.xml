@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="datadb"> <!-- sql문법에 대한 그룹명 -->
+<!-- 
+insert,select,update,delete
+${}: 필드명, 테이블명 파라미터
+#{}: 값을 적용시킬 때 사용하는 파라미터
+
+//resultType : select 태그에만 사용하는 속성
+ -->
+<delete id="rainfall_delete" parameterType="Object">
+delete from rainfall where ridx=#{ridx}
+</delete>
+  
+<update id="rainfall_update" parameterType="Object">
+update rainfall set area_part1=#{area_part1},
+					area_part2=#{area_part2},
+					area_part3=#{area_part3},
+					area_part4=#{area_part4},
+					area_part5=#{area_part5}
+				where ridx=#{ridx}
+</update>
+  
+<select id="all_select" resultType="rainfalldao">
+select today from rainfall order by ridx desc
+</select>
+ 
+<select id="ajax_select2" resultType="rainfalldao">
+select * from rainfall where today=#{today}
+</select>
+ 
+ <!-- 입력된 날짜데이터 확인 -->
+ <select id="ajax_select" resultType="String">
+ select count(*) as ctn from rainfall where today=#{today}
+ </select>
+ 
+ <!-- 강수량 데이터 입력파트 -->
+<insert id="rain_insert">
+insert into rainfall (ridx,today,area_part1,area_part2,area_part3,area_part4,area_part5)
+values ('0',#{today},#{area_part1},#{area_part2},#{area_part3},#{area_part4},#{area_part5})
+</insert>
+ 
+ 
+<delete id="point_del">
+delete from userpoint where uidx=#{uidx}
+</delete> 
+<select id="point_one" resultType="pointdao"> <!-- resultType: setter역할 -->
+select * from userpoint where uidx=#{aa} order by uidx desc
+</select>
+<select id="point_select" resultType="pointdao"> <!-- config.xml -->
+select * from userpoint order by uidx desc
+</select>
+<insert id="point_insert">	<!-- 해당 그룹에 따른 id값으로 query문 실행 -->
+insert into userpoint (uidx,uid,uname,upoint,udate)
+values ('0',#{uid},#{uname},#{upoint},now())
+</insert>
+<insert id="coupon_insert">
+insert into coupon (cidx,cpname,cprate,cpuse,cpdate,indate)
+values ('0',#{cpname},#{cprate},#{cpuse},#{cpdate},now())
+</insert>
+</mapper>

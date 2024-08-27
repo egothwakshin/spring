@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+<!--
+	Spring은 기본으로 MVC 형태의 web프레임워크 이므로 
+	beans: 의존성 여부를 체크하는 소스코드
+	context(class), mvc(jsp로 출력하는 형태)
+ -->
+ <!-- @를 일반 class 파일에 사용할 수 있도록 하겠다 -->
+<annotation-driven></annotation-driven>
+<!-- 
+모든 파일을 사용할 수 있도록 적용 단, resources에
+특정 파일을 적용시 해당 파일 속성만 적용됩니다.
+-->
+<resources location="/" mapping="/**"></resources>
+<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<!-- prefix: view페이지를 보여줄 경로, suffix: view페이지 파일 속성명 -->
+	<beans:property name="prefix" value="/"></beans:property>
+	<beans:property name="suffix" value=".jsp"></beans:property>
+	<!--  
+	<beans:property name="contentType" value="text/html;charset=UTF-8"></beans:property>
+	-->
+</beans:bean>
+<!-- class를 로드하는 부분(Contorller) -->
+<!--  
+<beans:bean class="webspring.mainpage"></beans:bean>
+<beans:bean class="webspring.mainpage2"></beans:bean>
+-->
+<!-- package 전체에 어노테이션 및 XML에 사용하는 id값을 연동할 수 있도록 오픈함 -->
+<context:component-scan base-package="api"/>
+
+<!-- 파일업로드를 사용할 수 있도록 class를 XML로 로드 -->
+<!-- id=multipartResolver (필수로 해당 아이디를 적용) -->
+<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+<!--
+maxUploadSize : 최대 업로드 파일크기 (-1: 업로드 용량제한 없음)
+-->
+<beans:property name="defaultEncoding" value="utf-8"></beans:property>
+<beans:property name="maxUploadSize" value="-1"></beans:property>
+<!--
+maxInMemorySize : Tomcat에서 사용되는 메모리와 대칭이 되며
+server.xml의 메모리 max에 할당되는 사이즈 만큼 적용할 수 있음
+-->
+<beans:property name="maxInMemorySize" value="200000"></beans:property>
+
+</beans:bean>
+
+</beans:beans>
